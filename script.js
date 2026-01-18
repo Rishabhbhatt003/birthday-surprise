@@ -120,61 +120,38 @@ Gặp được em đã khiến anh thật sự hạnh phúc, và anh sẽ luôn 
   viBtn.addEventListener("click", () => setLanguage("vi"));
 
   /* =========================
-     LOCK UNTIL 17 JAN 2026
+     DIRECT START (LOCK REMOVED)
   ========================= */
-  const unlockDate = new Date("2025-12-25T00:00:00").getTime();
 
-  function checkUnlock() {
-    const now = new Date().getTime();
-    const diff = unlockDate - now;
+  // Hide lock immediately
+  lockScreen.style.display = "none";
 
-    if (diff <= 0) {
-      // 1) Hide lock screen
-      lockScreen.style.display = "none";
+  // Show cinematic immediately
+  cinematic.style.display = "flex";
+  cinematic.style.opacity = "1";
 
-      // 2) Show cinematic
-      cinematic.style.display = "flex";
-      cinematic.style.opacity = "1";
+  music.play().catch(() => {});
+  cinematic.addEventListener(
+    "click",
+    () => {
+      music.muted = false;
+      music.play();
+    },
+    { once: true }
+  );
 
-      /* ✅ AUTOPLAY MUSIC */
-      music.play().catch(() => {});
-      cinematic.addEventListener(
-        "click",
-        () => {
-          music.muted = false;
-          music.play();
-        },
-        { once: true }
-      );
+  setTimeout(() => {
+    mainContent.style.opacity = "1";
+  }, 7000);
 
-      // 3) Start fading IN the main content EARLIER
-      setTimeout(() => {
-        mainContent.style.opacity = "1";
-      }, 7000); // earlier fade-in
+  setTimeout(() => {
+    cinematic.style.opacity = "0";
+  }, 8500);
 
-      // 4) Fade cinematic OUT
-      setTimeout(() => {
-        cinematic.style.opacity = "0";
-      }, 8500);
+  setTimeout(() => {
+    cinematic.style.display = "none";
+  }, 10200);
 
-      // 5) Remove cinematic AFTER fade
-      setTimeout(() => {
-        cinematic.style.display = "none";
-      }, 10200);
-
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-
-    const suffix = LANG[currentLang].countdownSuffix;
-    countdownEl.innerText = `${days} days ${hours} hours ${minutes} minutes ${suffix}`;
-  }
-
-  checkUnlock();
-  setInterval(checkUnlock, 60000);
 
   /* =========================
      MUSIC + CAROUSEL SYNC
@@ -209,4 +186,73 @@ Gặp được em đã khiến anh thật sự hạnh phúc, và anh sẽ luôn 
   envelope.addEventListener("click", () => {
     envelope.classList.toggle("open");
   });
+  
 });
+/* =========================
+   SCROLL DRAG (C1 – TRUE MANUAL)
+========================= */
+
+const scroll = document.querySelector(".scroll");
+const scrollPaper = document.querySelector(".scroll-paper");
+const bottomRoll = document.querySelector(".bottom-roll");
+
+if (scroll && scrollPaper && bottomRoll) {
+  let isDragging = false;
+  let startY = 0;
+  let startHeight = 0;
+
+  // Max height = full content height
+  const getMaxHeight = () => scrollPaper.scrollHeight;
+
+  const startDrag = (y) => {
+    isDragging = true;
+    startY = y;
+    startHeight = scrollPaper.offsetHeight;
+    scrollPaper.style.transition = "none";
+  };
+
+  const onDrag = (y) => {
+    if (!isDragging) return;
+
+    let delta = y - startY;
+    let newHeight = startHeight + delta;
+
+    const maxHeight = getMaxHeight();
+
+    // Clamp
+    if (newHeight < 0) newHeight = 0;
+    if (newHeight > maxHeight) newHeight = maxHeight;
+
+    scrollPaper.style.height = `${newHeight}px`;
+    bottomRoll.style.transform = `translateY(${newHeight}px)`;
+  };
+
+  const stopDrag = () => {
+    isDragging = false;
+  };
+
+  /* ---- Mouse events ---- */
+  bottomRoll.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    startDrag(e.clientY);
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    onDrag(e.clientY);
+  });
+
+  document.addEventListener("mouseup", stopDrag);
+
+  /* ---- Touch events ---- */
+  bottomRoll.addEventListener("touchstart", (e) => {
+    startDrag(e.touches[0].clientY);
+  }, { passive: false });
+
+  document.addEventListener("touchmove", (e) => {
+    onDrag(e.touches[0].clientY);
+  }, { passive: false });
+
+  document.addEventListener("touchend", stopDrag);
+}
+
+
