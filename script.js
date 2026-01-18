@@ -1,468 +1,258 @@
-/* =========================
-   GLOBAL STYLES
-========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("JS LOADED");
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
+  /* =========================
+     AOS INIT
+  ========================= */
+  AOS.init({
+    duration: 900,
+    easing: "ease-out-cubic",
+    once: true,
+  });
 
-body {
-  background: linear-gradient(
-    135deg,
-    #ff9a9e,
-    #fad0c4,
-    #fbc2eb
+  /* =========================
+     ELEMENT REFERENCES
+  ========================= */
+  const lockScreen = document.getElementById("lockScreen");
+  const mainContent = document.getElementById("mainContent");
+  const cinematic = document.getElementById("cinematic");
+
+  const countdownEl = document.getElementById("countdown");
+  const lockTitle = document.getElementById("lockTitle");
+  const lockText = document.getElementById("lockText");
+
+  const cine1 = document.getElementById("cine1");
+  const cine2 = document.getElementById("cine2");
+  const cine3 = document.getElementById("cine3");
+
+  const btn = document.getElementById("btn");
+  const output = document.getElementById("output");
+  const music = document.getElementById("bgMusic");
+  const carousel = document.querySelector(".carousel");
+
+  const envelope = document.getElementById("envelope");
+
+  const enBtn = document.getElementById("enBtn");
+  const viBtn = document.getElementById("viBtn");
+
+  const title = document.getElementById("title");
+  const text = document.getElementById("text");
+  const letterTitle = document.getElementById("letterTitle");
+  const letterBody = document.getElementById("letterBody");
+  const signature = document.getElementById("signature");
+
+  /* =========================
+     LANGUAGE DATA
+  ========================= */
+  const LANG = {
+    en: {
+      heroTitle: "Happy Birthday 🤍",
+      heroText: "You are the most beautiful part of my life.",
+
+      cinematic: [
+        "For someone special…",
+        "Across the distance…",
+        "With patience, effort, and love 🤍",
+      ],
+
+      lockTitle: "🎁 A Surprise Is Waiting",
+      lockText: "This gift will open on 17 January",
+      countdownSuffix: "left 💝",
+
+      letterTitle: "For you, my love 🤍",
+      letterBody: `I just want you to know how incredibly beautiful you are — not just in the way you look, but in the way you think, speak, understand, and care. You are pretty in a way that feels gentle, adorable in a way that makes me smile without trying, and cute in the smallest things you do without even realizing it. Your understanding nature, your talent, and the way you handle things so calmly amaze me more every day. Talking to you has become one of the best parts of my day, and I’m honestly so thankful that life somehow brought us together.
+
+I love you — not in a rushed or careless way, but in a quiet, growing way that feels real and meaningful. I know we are far apart right now, and I know time stands between us, but I promise you this: give me two years, and I will come to you. I’m working toward that day with all my heart. Until then, I just ask you to wait for me, believe in me, and keep this small light between us alive.
+
+Meeting you made me genuinely happy, and I’ll always be grateful for that — no matter what the future holds.`,
+      signature: "— always yours 🤍",
+    },
+
+    vi: {
+      heroTitle: "Chúc mừng sinh nhật 🤍",
+      heroText: "Em là điều đẹp đẽ nhất trong cuộc đời anh.",
+
+      cinematic: [
+        "Dành cho một người rất đặc biệt…",
+        "Dù cách xa nhau…",
+        "Bằng sự kiên nhẫn, nỗ lực và yêu thương 🤍",
+      ],
+
+      lockTitle: "🎁 Một món quà đang chờ đợi",
+      lockText: "Món quà này sẽ mở vào ngày 17 tháng 1",
+      countdownSuffix: "còn lại 💝",
+
+      letterTitle: "Dành cho em, người anh thương 🤍",
+      letterBody: `Anh chỉ muốn em biết rằng em xinh đẹp theo một cách rất đặc biệt — không chỉ ở vẻ ngoài, mà còn ở cách em suy nghĩ, nói chuyện, thấu hiểu và quan tâm đến người khác. Em dịu dàng, đáng yêu theo cách khiến anh mỉm cười mà không cần cố gắng, và dễ thương trong cả những điều nhỏ bé mà có khi chính em cũng không nhận ra. Sự thấu hiểu, tài năng và cách em bình tĩnh đối mặt với mọi thứ khiến anh ngưỡng mộ em nhiều hơn mỗi ngày. Nói chuyện với em đã trở thành một trong những khoảnh khắc đẹp nhất trong ngày của anh, và anh thật sự biết ơn vì cuộc sống đã cho anh gặp em.
+
+Anh yêu em — không phải một cách vội vàng hay hời hợt, mà là một tình cảm lặng lẽ, lớn dần theo thời gian, rất thật và rất sâu. Anh biết hiện tại chúng ta ở rất xa nhau, và anh biết thời gian vẫn còn ở phía trước, nhưng anh hứa với em điều này: hãy cho anh hai năm, anh nhất định sẽ đến bên em. Anh đang cố gắng từng ngày vì khoảnh khắc đó. Cho đến lúc ấy, anh chỉ mong em chờ anh, tin anh, và cùng anh giữ gìn ánh sáng nhỏ bé giữa chúng ta.
+
+Gặp được em đã khiến anh thật sự hạnh phúc, và anh sẽ luôn trân trọng điều đó — dù tương lai có ra sao đi nữa.`,
+      signature: "— mãi là của em 🤍",
+    },
+  };
+
+  /* =========================
+     LANGUAGE SWITCH
+  ========================= */
+  function setLanguage(lang) {
+    const L = LANG[lang];
+
+    title.innerText = L.heroTitle;
+    text.innerText = L.heroText;
+
+    cine1.innerText = L.cinematic[0];
+    cine2.innerText = L.cinematic[1];
+    cine3.innerText = L.cinematic[2];
+
+    lockTitle.innerText = L.lockTitle;
+    lockText.innerText = L.lockText;
+
+    letterTitle.innerText = L.letterTitle;
+    letterBody.innerText = L.letterBody;
+    signature.innerText = L.signature;
+
+    currentLang = lang;
+  }
+
+  let currentLang = "en";
+  enBtn.addEventListener("click", () => setLanguage("en"));
+  viBtn.addEventListener("click", () => setLanguage("vi"));
+
+  /* =========================
+     DIRECT START (LOCK REMOVED)
+  ========================= */
+
+  // Hide lock immediately
+  lockScreen.style.display = "none";
+
+  // Show cinematic immediately
+  cinematic.style.display = "flex";
+  cinematic.style.opacity = "1";
+
+  music.play().catch(() => {});
+  cinematic.addEventListener(
+    "click",
+    () => {
+      music.muted = false;
+      music.play();
+    },
+    { once: true }
   );
-  color: #fff;
-  text-align: center;
-  overflow-x: hidden;
-  position: relative;
-  z-index: 1;
-}
 
-section {
-  padding: 80px 20px;
-}
+  setTimeout(() => {
+    mainContent.style.opacity = "1";
+  }, 7000);
 
+  setTimeout(() => {
+    cinematic.style.opacity = "0";
+  }, 8500);
+
+  setTimeout(() => {
+    cinematic.style.display = "none";
+  }, 10200);
+
+
+  /* =========================
+     MUSIC + CAROUSEL SYNC
+  ========================= */
+  btn.addEventListener("click", () => {
+    music.play();
+    output.innerText = "Music is playing 🎵💖";
+  });
+
+  if (carousel) {
+    music.addEventListener("play", () => {
+      carousel.style.animationDuration = "16s";
+    });
+
+    music.addEventListener("pause", () => {
+      carousel.style.animationDuration = "28s";
+    });
+  }
+
+  document.addEventListener(
+    "click",
+    () => {
+      music.muted = false;
+      music.play();
+    },
+    { once: true }
+  );
+
+  /* =========================
+     LETTER OPEN
+  ========================= */
+  envelope.addEventListener("click", () => {
+    envelope.classList.toggle("open");
+  });
+  
+});
 /* =========================
-   BUTTONS
+   SCROLL DRAG (C1 – TRUE MANUAL)
 ========================= */
 
-button {
-  background: linear-gradient(135deg, #ff6a88, #ff99ac);
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 105, 135, 0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+const scroll = document.querySelector(".scroll");
+const scrollPaper = document.querySelector(".scroll-paper");
+const bottomRoll = document.querySelector(".bottom-roll");
+
+if (scroll && scrollPaper && bottomRoll) {
+  let isDragging = false;
+  let startY = 0;
+  let startHeight = 0;
+
+  // Max height = full content height
+  const getMaxHeight = () => scrollPaper.scrollHeight;
+
+  const startDrag = (y) => {
+    isDragging = true;
+    startY = y;
+    startHeight = scrollPaper.offsetHeight;
+    scrollPaper.style.transition = "none";
+  };
+
+  const onDrag = (y) => {
+    if (!isDragging) return;
+
+    let delta = y - startY;
+    let newHeight = startHeight + delta;
+
+    const maxHeight = getMaxHeight();
+
+    // Clamp
+    if (newHeight < 0) newHeight = 0;
+    if (newHeight > maxHeight) newHeight = maxHeight;
+
+    scrollPaper.style.height = `${newHeight}px`;
+    bottomRoll.style.transform = `translateY(${newHeight}px)`;
+  };
+
+  const stopDrag = () => {
+    isDragging = false;
+  };
+
+  /* ---- Mouse events ---- */
+  bottomRoll.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    startDrag(e.clientY);
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    onDrag(e.clientY);
+  });
+
+  document.addEventListener("mouseup", stopDrag);
+
+  /* ---- Touch events ---- */
+  bottomRoll.addEventListener("touchstart", (e) => {
+    startDrag(e.touches[0].clientY);
+  }, { passive: false });
+
+  document.addEventListener("touchmove", (e) => {
+    onDrag(e.touches[0].clientY);
+  }, { passive: false });
+
+  document.addEventListener("touchend", stopDrag);
 }
 
-button:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 18px 35px rgba(255, 105, 135, 0.55);
-}
-
-button:active {
-  transform: scale(0.97);
-}
-
-/* =========================
-   LANGUAGE TOGGLE
-========================= */
-
-.lang-toggle {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 100;
-}
-
-.lang-toggle button {
-  margin: 4px;
-  padding: 6px 12px;
-  font-size: 0.8rem;
-}
-
-/* =========================
-   LOCK SCREEN
-========================= */
-
-#lockScreen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(120deg, #ff758c, #ff7eb3);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 9999;
-}
-
-#lockScreen h1 {
-  font-size: 2.2rem;
-  margin-bottom: 15px;
-}
-
-#lockScreen p {
-  font-size: 1.1rem;
-  opacity: 0.95;
-}
-
-#countdown {
-  margin-top: 20px;
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-
-/* =========================
-   CINEMATIC INTRO
-========================= */
-
-#cinematic {
-  position: fixed;
-  inset: 0;
-  background: black;
-  color: white;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 9998;
-  opacity: 1;
-  transition: opacity 1.2s ease;
-}
-
-.cinematic-content {
-  font-size: 1.6rem;
-  line-height: 2;
-  letter-spacing: 1px;
-}
-
-.cinematic-content .line {
-  opacity: 0;
-  animation: fadeInOut 3.5s ease forwards;
-}
-
-.delay1 { animation-delay: 3.5s; }
-.delay2 { animation-delay: 7s; }
-
-@keyframes fadeInOut {
-  0%   { opacity: 0; transform: translateY(10px); }
-  15%  { opacity: 1; transform: translateY(0); }
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-10px); }
-}
-
-
-
-/* =========================
-   HERO
-========================= */
-#mainContent {
-  opacity: 0;
-  transition: opacity 1.2s ease;
-  position: relative;
-  z-index: 1;
-}
-
-
-.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.hero h1 {
-  font-size: 2.6rem;
-  margin-bottom: 10px;
-}
-
-.hero p {
-  font-size: 1.1rem;
-  opacity: 0.95;
-}
-
-#output {
-  margin-top: 12px;
-  font-size: 0.9rem;
-}
-
-/* =========================
-   GALLERY + 3D CAROUSEL
-========================= */
-
-.gallery h2 {
-  margin-bottom: 20px;
-}
-
-.gallery-text {
-  margin-top: 15px;
-  font-style: italic;
-  opacity: 0.9;
-}
-
-.carousel {
-  position: relative;
-  width: 260px;
-  height: 260px;
-  margin: 60px auto;
-  transform-style: preserve-3d;
-  animation: rotate 22s linear infinite;
-}
-
-.carousel span {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transform: rotateY(calc(var(--i) * 60deg)) translateZ(320px);
-}
-
-.carousel span img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.35);
-  cursor: pointer;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
-
-.carousel span img:hover {
-  transform: scale(1.15);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.55);
-}
-
-@keyframes rotate {
-  from { transform: perspective(1000px) rotateY(0deg); }
-  to   { transform: perspective(1000px) rotateY(360deg); }
-}
-
-/* =========================
-   LETTER & ENVELOPE
-========================= */
-
-.letter-wrapper {
-  margin: 120px auto;
-  text-align: center;
-}
-
-.open-text {
-  margin-top: 15px;
-  opacity: 0.8;
-  font-style: italic;
-}
-
-.envelope {
-  position: relative;
-  width: 520px;
-  height: 340px;
-  margin: 0 auto;
-  cursor: pointer;
-  perspective: 1600px;
-}
-.envelope-body {
-  position: absolute;
-  inset: 0;
-  background: #fff;
-  border-radius: 18px;
-  z-index: 1;
-  overflow: visible;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-}
-
-.envelope-top {
-  position: absolute;
-  inset: 0;
-  background: #f3f3f3;
-  clip-path: polygon(0 0, 100% 0, 50% 72%);
-  transform-origin: top;
-  transition: transform 1s cubic-bezier(.25,.8,.25,1);
-  z-index: 3;
-  backface-visibility: hidden;
-}
-.letter {
-  position: absolute;
-  width: 88%;
-  left: 6%;
-  top: 26px;
-
-  background-color: #f3e6c8; /* parchment base */
-background-image: url("assets/parchment.png");
-background-size: cover 120%;
-background-repeat: no-repeat;
-background-position: center;
-
-
-  color: #4a3a28;
-  padding: 36px;
-  border-radius: 14px;
-
-  transform: translateY(160px);
-  opacity: 0;
-
-  transition:
-    transform 1s cubic-bezier(.22,1,.36,1),
-    opacity 0.8s ease;
-
-  z-index: 2;
-
-  box-shadow:
-    0 20px 40px rgba(0,0,0,0.25),
-    inset 0 0 18px rgba(0,0,0,0.04);
-}
-
-.signature {
-  margin-top: 20px;
-  font-style: italic;
-  text-align: right;
-  opacity: 0.8;
-}
-
-.envelope.open .envelope-top {
-  transform: rotateX(180deg);
-}
-
-.envelope.open .letter {
-  transform: translateY(-60px);
-  opacity: 1;
-}
-
-
-/* =========================
-   FLOATING HEARTS
-========================= */
-
-.hearts {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.hearts span {
-  position: absolute;
-  bottom: -10%;
-  font-size: 14px;
-  color: rgba(255, 160, 180, 0.5);
-  animation: floatHeart linear infinite;
-}
-
-.hearts span:nth-child(1)  { left: 3%;  animation-duration: 17s; }
-.hearts span:nth-child(2)  { left: 9%;  animation-duration: 24s; }
-.hearts span:nth-child(3)  { left: 14%; animation-duration: 19s; }
-.hearts span:nth-child(4)  { left: 21%; animation-duration: 26s; }
-.hearts span:nth-child(5)  { left: 27%; animation-duration: 18s; }
-.hearts span:nth-child(6)  { left: 33%; animation-duration: 23s; }
-.hearts span:nth-child(7)  { left: 38%; animation-duration: 16s; }
-.hearts span:nth-child(8)  { left: 46%; animation-duration: 28s; }
-.hearts span:nth-child(9)  { left: 51%; animation-duration: 20s; }
-.hearts span:nth-child(10) { left: 57%; animation-duration: 25s; }
-
-.hearts span:nth-child(11) { left: 62%; animation-duration: 18s; }
-.hearts span:nth-child(12) { left: 68%; animation-duration: 27s; }
-.hearts span:nth-child(13) { left: 73%; animation-duration: 21s; }
-.hearts span:nth-child(14) { left: 79%; animation-duration: 24s; }
-.hearts span:nth-child(15) { left: 84%; animation-duration: 19s; }
-.hearts span:nth-child(16) { left: 88%; animation-duration: 26s; }
-.hearts span:nth-child(17) { left: 92%; animation-duration: 17s; }
-.hearts span:nth-child(18) { left: 96%; animation-duration: 29s; }
-
-.hearts span:nth-child(19) { left: 7%;  animation-duration: 22s; }
-.hearts span:nth-child(20) { left: 41%; animation-duration: 15s; }
-.hearts span:nth-child(21) { left: 66%; animation-duration: 30s; }
-.hearts span:nth-child(22) { left: 18%; animation-duration: 20s; }
-.hearts span:nth-child(23) { left: 55%; animation-duration: 27s; }
-.hearts span:nth-child(24) { left: 81%; animation-duration: 16s; }
-.hearts span:nth-child(25) { left: 11%; animation-duration: 23s; }
-.hearts span:nth-child(26) { left: 49%; animation-duration: 18s; }
-.hearts span:nth-child(27) { left: 90%; animation-duration: 26s; }
-
-
-
-@keyframes floatHeart {
-  0%   { transform: translateY(0) scale(0.8); opacity: 0; }
-  20%  { opacity: 0.5; }
-  100% { transform: translateY(-120vh) scale(1.1); opacity: 0; }
-}
-
-
-/* =========================
-   MOBILE POLISH
-========================= */
-@media (max-width: 1023px) {
-
-  /* Reduce carousel depth */
-  .carousel span {
-    transform: rotateY(calc(var(--i) * 60deg)) translateZ(280px);
-  }
-
-  /* Slightly reduce letter slide */
-  .envelope.open .letter {
-    transform: translateY(-40px);
-  }
-}
-@media (max-width: 768px) {
-
-  section {
-    padding: 60px 18px;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.6rem;
-  }
-
-  p {
-    font-size: 0.95rem;
-  }
-
-  /* Carousel */
-  .carousel {
-    width: 220px;
-    height: 220px;
-    margin: 40px auto;
-  }
-
-  .carousel span {
-    transform: rotateY(calc(var(--i) * 60deg)) translateZ(240px);
-  }
-
-  /* Envelope */
-  .envelope {
-    width: 94%;
-    height: 260px;
-  }
-
-  /* Letter */
-  .letter {
-    padding: 22px;
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-
-  .envelope.open .letter {
-    transform: translateY(-30px);
-  }
-
-  .letter-wrapper {
-    margin: 70px auto;
-  }
-
-  .cinematic-content {
-    font-size: 1.2rem;
-    padding: 0 20px;
-  }
-}
-
-
-/* MODIFY ONLY THESE VALUES */
-.hearts span {
-  font-size: 10px;
-  color: rgb(203, 4, 4);
-  scale: 5;
-}
-
-#btn {
-  display: none;
-}
-
-
-/* --- Instruction text --- */
-.open-text {
-  margin-top: 16px;
-  font-style: italic;
-  opacity: 0.8;
-}
 
