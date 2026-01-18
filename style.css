@@ -243,64 +243,61 @@ button:active {
 
 .envelope {
   position: relative;
-  width: 320px;
-  height: 200px;
+  width: 520px;
+  height: 340px;
   margin: 0 auto;
   cursor: pointer;
-  perspective: 1000px;
+  perspective: 1600px;
 }
-
 .envelope-body {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 18px;
   z-index: 1;
+  overflow: visible;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
 }
 
 .envelope-top {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #f2f2f2;
-  clip-path: polygon(0 0, 100% 0, 50% 60%);
+  inset: 0;
+  background: #f3f3f3;
+  clip-path: polygon(0 0, 100% 0, 50% 72%);
   transform-origin: top;
-  transition: transform 0.8s ease;
+  transition: transform 1s cubic-bezier(.25,.8,.25,1);
   z-index: 3;
+  backface-visibility: hidden;
 }
-
 .letter {
   position: absolute;
-  width: 90%;
-  background: #faf7f2;
-  color: #444;
-  top: 10px;
-  left: 5%;
-  padding: 30px;
-  border-radius: 10px;
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all 0.8s ease;
-  z-index: 2;
-  line-height: 1.8;
+  width: 88%;
+  left: 6%;
+  top: 26px;
 
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,0.6),
-      rgba(255,255,255,0.6)
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,0,0,0.015),
-      rgba(0,0,0,0.015) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+  background-color: #f3e6c8; /* parchment base */
+background-image: url("assets/parchment.png");
+background-size: cover 120%;
+background-repeat: no-repeat;
+background-position: center;
+
+
+  color: #4a3a28;
+  padding: 36px;
+  border-radius: 14px;
+
+  transform: translateY(160px);
+  opacity: 0;
+
+  transition:
+    transform 1s cubic-bezier(.22,1,.36,1),
+    opacity 0.8s ease;
+
+  z-index: 2;
 
   box-shadow:
-    0 10px 25px rgba(0,0,0,0.15),
-    inset 0 0 30px rgba(0,0,0,0.03);
+    0 20px 40px rgba(0,0,0,0.25),
+    inset 0 0 18px rgba(0,0,0,0.04);
 }
 
 .signature {
@@ -315,9 +312,10 @@ button:active {
 }
 
 .envelope.open .letter {
-  transform: translateY(-20px);
+  transform: translateY(-60px);
   opacity: 1;
 }
+
 
 /* =========================
    FLOATING HEARTS
@@ -380,7 +378,18 @@ button:active {
 /* =========================
    MOBILE POLISH
 ========================= */
+@media (max-width: 1023px) {
 
+  /* Reduce carousel depth */
+  .carousel span {
+    transform: rotateY(calc(var(--i) * 60deg)) translateZ(280px);
+  }
+
+  /* Slightly reduce letter slide */
+  .envelope.open .letter {
+    transform: translateY(-40px);
+  }
+}
 @media (max-width: 768px) {
 
   section {
@@ -399,6 +408,7 @@ button:active {
     font-size: 0.95rem;
   }
 
+  /* Carousel */
   .carousel {
     width: 220px;
     height: 220px;
@@ -406,28 +416,36 @@ button:active {
   }
 
   .carousel span {
-    transform: rotateY(calc(var(--i) * 60deg)) translateZ(260px);
+    transform: rotateY(calc(var(--i) * 60deg)) translateZ(240px);
   }
 
+  /* Envelope */
+  .envelope {
+    width: 94%;
+    height: 260px;
+  }
+
+  /* Letter */
   .letter {
     padding: 22px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .envelope.open .letter {
+    transform: translateY(-30px);
   }
 
   .letter-wrapper {
-    margin: 80px auto;
+    margin: 70px auto;
   }
 
   .cinematic-content {
     font-size: 1.2rem;
     padding: 0 20px;
   }
-
-  .sakura span {
-    width: 10px;
-    height: 10px;
-  }
 }
+
 
 /* MODIFY ONLY THESE VALUES */
 .hearts span {
@@ -439,3 +457,12 @@ button:active {
 #btn {
   display: none;
 }
+
+
+/* --- Instruction text --- */
+.open-text {
+  margin-top: 16px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
